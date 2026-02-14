@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  web:
+    container_name: vlow-app
+    build:
+      context: .
+      args:
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
+        VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY}
+    ports:
+      - "8080:80" # Maps port 8080 on host to port 80 in container
+    restart: always
+    environment:
+      - NODE_ENV=production
