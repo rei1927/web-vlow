@@ -35,7 +35,7 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/cmsadmin" element={<Login />} />
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>

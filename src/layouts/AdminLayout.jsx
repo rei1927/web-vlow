@@ -10,7 +10,7 @@ export default function AdminLayout() {
 
     const handleLogout = async () => {
         await signOut();
-        navigate('/login');
+        navigate('/cmsadmin');
     };
 
     const menuItems = [
