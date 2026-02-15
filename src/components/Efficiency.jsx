@@ -7,7 +7,12 @@ export default function Efficiency() {
         <section id="efficiency" className="py-24 bg-white relative">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    <div>
+                    <motion.div
+                        initial={{ opacity: 0, x: -50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8 }}
+                    >
                         <h2 className="text-3xl md:text-5xl font-bold text-dark-950 mb-6">
                             Scale bisnis kamu <br />
                             <span className="text-primary-600">10x lebih cepet</span> pake AI
@@ -31,9 +36,15 @@ export default function Efficiency() {
                                 </div>
                             ))}
                         </div>
-                    </div>
+                    </motion.div>
 
-                    <div className="relative">
+                    <motion.div
+                        initial={{ opacity: 0, x: 50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        className="relative"
+                    >
                         {/* Stats Cards */}
                         <div className="grid grid-cols-2 gap-6">
                             <motion.div
@@ -74,7 +85,7 @@ export default function Efficiency() {
                                 </div>
                             </motion.div>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
             </div>
         </section>

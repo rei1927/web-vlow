@@ -46,9 +46,38 @@ export default function Hero() {
                             transition={{ duration: 0.5 }}
                         >
                             <Badge className="mb-6">Baru: AI Agent V2.0 udah live! 🚀</Badge>
-                            <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-dark-950 mb-6 leading-tight">
-                                Tingkatin Support Bisnis Kamu pake <span className="text-primary-600">Vlow.AI</span>
-                            </h1>
+
+                            <motion.h1
+                                className="text-5xl lg:text-7xl font-bold tracking-tight text-dark-950 mb-6 leading-tight"
+                                initial="hidden"
+                                animate="visible"
+                                variants={{
+                                    visible: { transition: { staggerChildren: 0.1 } }
+                                }}
+                            >
+                                {["Tingkatin", "Support", "Bisnis", "Kamu", "pake"].map((word, i) => (
+                                    <motion.span
+                                        key={i}
+                                        className="inline-block mr-3"
+                                        variants={{
+                                            hidden: { y: 20, opacity: 0 },
+                                            visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 100 } }
+                                        }}
+                                    >
+                                        {word}
+                                    </motion.span>
+                                ))}
+                                <br className="hidden lg:block" />
+                                <motion.span
+                                    className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-purple-500 to-primary-600 bg-300% animate-gradient inline-block"
+                                    variants={{
+                                        hidden: { scale: 0.8, opacity: 0 },
+                                        visible: { scale: 1, opacity: 1, transition: { duration: 0.8, ease: "backOut" } }
+                                    }}
+                                >
+                                    Vlow.AI
+                                </motion.span>
+                            </motion.h1>
                             <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
                                 Otomatisin 80% chat customer pake AI agent yang pinter.
                                 Hemat biaya, respon lebih cepet, dan bikin customer happy 24/7.

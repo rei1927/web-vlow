@@ -12,13 +12,14 @@ export default function Navbar() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-20">
                     {/* Logo */}
-                    <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer">
+                    <a href="/" className="flex-shrink-0 flex items-center gap-2 cursor-pointer">
                         <img src={logo} alt="Vlow.AI Logo" className="h-10 w-auto" />
                         <span className="font-bold text-2xl tracking-tight text-dark-950">Vlow.AI</span>
-                    </div>
+                    </a>
 
                     {/* Desktop Menu */}
                     <div className="hidden md:flex items-center space-x-10">
+                        <a href="/" className="text-sm font-medium text-slate-600 hover:text-primary-600 transition-colors">Beranda</a>
                         <a href="#features" className="text-sm font-medium text-slate-600 hover:text-primary-600 transition-colors">Fitur</a>
                         <a href="#efficiency" className="text-sm font-medium text-slate-600 hover:text-primary-600 transition-colors">Efisiensi</a>
                         <a href="#pricing" className="text-sm font-medium text-slate-600 hover:text-primary-600 transition-colors">Harga</a>
@@ -47,6 +48,7 @@ export default function Navbar() {
                         className="md:hidden bg-white border-b border-slate-100 overflow-hidden"
                     >
                         <div className="px-4 pt-2 pb-6 space-y-2shadow-xl">
+                            <a href="/" className="block px-3 py-2 text-slate-600 hover:text-primary-600 hover:bg-secondary-50 rounded-lg">Beranda</a>
                             <a href="#features" className="block px-3 py-2 text-slate-600 hover:text-primary-600 hover:bg-secondary-50 rounded-lg">Fitur</a>
                             <a href="#efficiency" className="block px-3 py-2 text-slate-600 hover:text-primary-600 hover:bg-secondary-50 rounded-lg">Efisiensi</a>
                             <a href="#pricing" className="block px-3 py-2 text-slate-600 hover:text-primary-600 hover:bg-secondary-50 rounded-lg">Harga</a>
