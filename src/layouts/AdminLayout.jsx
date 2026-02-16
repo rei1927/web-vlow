@@ -17,6 +17,7 @@ export default function AdminLayout() {
         { icon: LayoutDashboard, label: 'Dashboard', path: '/admin' },
         { icon: DollarSign, label: 'Harga', path: '/admin/pricing' },
         { icon: List, label: 'Fitur', path: '/admin/features' },
+        { icon: Globe, label: 'SEO', path: '/admin/seo' },
         { icon: Settings, label: 'Pengaturan', path: '/admin/settings' },
     ];
 

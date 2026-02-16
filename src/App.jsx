@@ -28,10 +28,14 @@ function LandingPage() {
   );
 }
 
+import SEOHead from './components/SEOHead';
+import AdminSEO from './pages/admin/SEO';
+
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <SEOHead />
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
@@ -44,6 +48,7 @@ function App() {
               <Route path="pricing" element={<AdminPricing />} />
               <Route path="features" element={<AdminFeatures />} />
               <Route path="settings" element={<AdminSettings />} />
+              <Route path="seo" element={<AdminSEO />} />
             </Route>
           </Route>
         </Routes>
