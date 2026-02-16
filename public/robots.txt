@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://vlow-ai.com/sitemap.xml
+Sitemap: https://vlow-ai.com/mapsite.xml
