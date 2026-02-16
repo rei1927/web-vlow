@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, LogOut, DollarSign, List, Home, Settings } from 'lucide-react';
+import { LayoutDashboard, LogOut, DollarSign, List, Home, Settings, Globe } from 'lucide-react';
 
 export default function AdminLayout() {
     const { signOut } = useAuth();
