@@ -61,7 +61,7 @@ export default function Hero() {
                                         className="inline-block mr-3"
                                         variants={{
                                             hidden: { y: 20, opacity: 0 },
-                                            visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 100 } }
+                                            visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } }
                                         }}
                                     >
                                         {word}
@@ -71,8 +71,8 @@ export default function Hero() {
                                 <motion.span
                                     className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-purple-500 to-primary-600 bg-300% animate-gradient inline-block"
                                     variants={{
-                                        hidden: { scale: 0.8, opacity: 0 },
-                                        visible: { scale: 1, opacity: 1, transition: { duration: 0.8, ease: "backOut" } }
+                                        hidden: { scale: 0.9, opacity: 0 },
+                                        visible: { scale: 1, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } }
                                     }}
                                 >
                                     Vlow.AI
