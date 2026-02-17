@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Features from './components/Features';
+import Comparison from './components/Comparison';
 import Efficiency from './components/Efficiency';
 import Pricing from './components/Pricing';
 import Footer from './components/Footer';
@@ -28,6 +29,7 @@ function LandingPage() {
       <Navbar />
       <Hero />
       <Features />
+      <Comparison />
       <Efficiency />
       <Pricing />
       <Footer />
