@@ -57,6 +57,26 @@ export default function SEOHead() {
             <meta property="twitter:image" content={seoData.og_image_url} />
 
             <link rel="canonical" href={`https://vlow-ai.com${location.pathname}`} />
+
+            {/* JSON-LD Structured Data */}
+            <script type="application/ld+json">
+                {JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "Organization",
+                    "name": "Vlow.AI",
+                    "url": "https://vlow-ai.com",
+                    "logo": "https://vlow-ai.com/logo.png",
+                    "sameAs": [
+                        "https://instagram.com/vlow.ai",
+                        "https://facebook.com/vlow.ai"
+                    ],
+                    "contactPoint": {
+                        "@type": "ContactPoint",
+                        "telephone": "+62-812-3456-7890",
+                        "contactType": "customer service"
+                    }
+                })}
+            </script>
         </Helmet>
     );
 }

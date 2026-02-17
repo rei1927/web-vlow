@@ -10,10 +10,13 @@ import Footer from './components/Footer';
 import Login from './pages/Login';
 import AdminLayout from './layouts/AdminLayout';
 import ProtectedRoute from './components/ProtectedRoute';
-import AdminDashboard from './pages/admin/Dashboard';
-import AdminPricing from './pages/admin/Pricing';
-import AdminFeatures from './pages/admin/Features';
-import AdminSettings from './pages/admin/Settings';
+
+// Lazy load admin pages
+const AdminDashboard = React.lazy(() => import('./pages/admin/Dashboard'));
+const AdminPricing = React.lazy(() => import('./pages/admin/Pricing'));
+const AdminFeatures = React.lazy(() => import('./pages/admin/Features'));
+const AdminSettings = React.lazy(() => import('./pages/admin/Settings'));
+const AdminSEO = React.lazy(() => import('./pages/admin/SEO'));
 
 function LandingPage() {
   return (
@@ -29,7 +32,7 @@ function LandingPage() {
 }
 
 import SEOHead from './components/SEOHead';
-import AdminSEO from './pages/admin/SEO';
+
 
 function App() {
   return (
@@ -44,11 +47,31 @@ function App() {
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<AdminDashboard />} />
-              <Route path="pricing" element={<AdminPricing />} />
-              <Route path="features" element={<AdminFeatures />} />
-              <Route path="settings" element={<AdminSettings />} />
-              <Route path="seo" element={<AdminSEO />} />
+              <Route index element={
+                <React.Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+                  <AdminDashboard />
+                </React.Suspense>
+              } />
+              <Route path="pricing" element={
+                <React.Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+                  <AdminPricing />
+                </React.Suspense>
+              } />
+              <Route path="features" element={
+                <React.Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+                  <AdminFeatures />
+                </React.Suspense>
+              } />
+              <Route path="settings" element={
+                <React.Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+                  <AdminSettings />
+                </React.Suspense>
+              } />
+              <Route path="seo" element={
+                <React.Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+                  <AdminSEO />
+                </React.Suspense>
+              } />
             </Route>
           </Route>
         </Routes>
