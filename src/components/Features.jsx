@@ -39,7 +39,11 @@ const features = [
     }
 ];
 
+import { useConsultation } from '../context/ConsultationContext';
+
 export default function Features() {
+    const { openModal } = useConsultation();
+
     return (
         <section id="features" className="py-24 bg-secondary-50 relative overflow-hidden">
             <div className="absolute top-1/2 left-1/4 w-[500px] h-[500px] bg-white blur-[120px] rounded-full pointer-events-none mix-blend-overlay" />
@@ -83,10 +87,10 @@ export default function Features() {
                         </div>
 
                         <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                            <Button size="lg" className="shadow-xl shadow-primary-500/20">
+                            <Button size="lg" className="shadow-xl shadow-primary-500/20" onClick={openModal}>
                                 Mulai Sekarang <ArrowRight className="w-5 h-5 ml-2" />
                             </Button>
-                            <Button variant="outline" size="lg">
+                            <Button variant="outline" size="lg" onClick={openModal}>
                                 Konsultasi Sales
                             </Button>
                         </div>

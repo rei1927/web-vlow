@@ -6,8 +6,11 @@ import Button from './Button';
 import Badge from './Badge';
 import defaultHeroImage from '../assets/hero.png';
 
+import { useConsultation } from '../context/ConsultationContext';
+
 export default function Hero() {
     const [heroImage, setHeroImage] = useState(defaultHeroImage);
+    const { openModal } = useConsultation();
 
     useEffect(() => {
         async function fetchSettings() {
@@ -84,7 +87,7 @@ export default function Hero() {
                             </p>
 
                             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                                <Button size="lg" className="w-full sm:w-auto shadow-xl shadow-primary-500/20">
+                                <Button size="lg" className="w-full sm:w-auto shadow-xl shadow-primary-500/20" onClick={openModal}>
                                     Coba Gratis Sekarang <ArrowRight className="w-5 h-5 ml-2" />
                                 </Button>
                                 <Button variant="outline" size="lg" className="w-full sm:w-auto">

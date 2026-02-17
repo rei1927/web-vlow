@@ -4,8 +4,11 @@ import { Menu, X } from 'lucide-react';
 import Button from './Button';
 import logo from '../assets/logo.png';
 
+import { useConsultation } from '../context/ConsultationContext';
+
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const { openModal } = useConsultation();
 
     return (
         <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-primary-100">
@@ -25,7 +28,7 @@ export default function Navbar() {
                         <a href="#pricing" className="text-sm font-medium text-slate-600 hover:text-primary-600 transition-colors">Harga</a>
                         <div className="flex items-center gap-4">
                             <a href="#" className="text-sm font-medium text-slate-900 hover:text-primary-600">Masuk</a>
-                            <Button size="sm" className="rounded-full px-6">Coba Gratis</Button>
+                            <Button size="sm" className="rounded-full px-6" onClick={openModal}>Coba Gratis</Button>
                         </div>
                     </div>
 
@@ -54,7 +57,7 @@ export default function Navbar() {
                             <a href="#pricing" className="block px-3 py-2 text-slate-600 hover:text-primary-600 hover:bg-secondary-50 rounded-lg">Harga</a>
                             <div className="pt-4 flex flex-col gap-3">
                                 <Button variant="outline" className="w-full justify-center">Masuk</Button>
-                                <Button className="w-full justify-center">Coba Gratis</Button>
+                                <Button className="w-full justify-center" onClick={openModal}>Coba Gratis</Button>
                             </div>
                         </div>
                     </motion.div>

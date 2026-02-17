@@ -13,10 +13,14 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 // Lazy load admin pages
 const AdminDashboard = React.lazy(() => import('./pages/admin/Dashboard'));
+const AdminLeads = React.lazy(() => import('./pages/admin/Leads'));
 const AdminPricing = React.lazy(() => import('./pages/admin/Pricing'));
 const AdminFeatures = React.lazy(() => import('./pages/admin/Features'));
 const AdminSettings = React.lazy(() => import('./pages/admin/Settings'));
 const AdminSEO = React.lazy(() => import('./pages/admin/SEO'));
+
+import { ConsultationProvider } from './context/ConsultationContext';
+import ConsultationModal from './components/ConsultationModal';
 
 function LandingPage() {
   return (
@@ -38,43 +42,51 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <SEOHead />
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/cmsadmin" element={<Login />} />
+        <ConsultationProvider>
+          <SEOHead />
+          <ConsultationModal />
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/cmsadmin" element={<Login />} />
 
-          {/* Protected Routes */}
-          <Route element={<ProtectedRoute />}>
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={
-                <React.Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
-                  <AdminDashboard />
-                </React.Suspense>
-              } />
-              <Route path="pricing" element={
-                <React.Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
-                  <AdminPricing />
-                </React.Suspense>
-              } />
-              <Route path="features" element={
-                <React.Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
-                  <AdminFeatures />
-                </React.Suspense>
-              } />
-              <Route path="settings" element={
-                <React.Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
-                  <AdminSettings />
-                </React.Suspense>
-              } />
-              <Route path="seo" element={
-                <React.Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
-                  <AdminSEO />
-                </React.Suspense>
-              } />
+            {/* Protected Routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={
+                  <React.Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+                    <AdminDashboard />
+                  </React.Suspense>
+                } />
+                <Route path="leads" element={
+                  <React.Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+                    <AdminLeads />
+                  </React.Suspense>
+                } />
+                <Route path="pricing" element={
+                  <React.Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+                    <AdminPricing />
+                  </React.Suspense>
+                } />
+                <Route path="features" element={
+                  <React.Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+                    <AdminFeatures />
+                  </React.Suspense>
+                } />
+                <Route path="settings" element={
+                  <React.Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+                    <AdminSettings />
+                  </React.Suspense>
+                } />
+                <Route path="seo" element={
+                  <React.Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+                    <AdminSEO />
+                  </React.Suspense>
+                } />
+              </Route>
             </Route>
-          </Route>
-        </Routes>
+          </Routes>
+        </ConsultationProvider>
       </AuthProvider>
     </BrowserRouter>
   );

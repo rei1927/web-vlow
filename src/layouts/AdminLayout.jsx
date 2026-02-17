@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, LogOut, DollarSign, List, Home, Settings, Globe } from 'lucide-react';
+import { LayoutDashboard, LogOut, DollarSign, List, Home, Settings, Globe, Users } from 'lucide-react';
 
 export default function AdminLayout() {
     const { signOut } = useAuth();
@@ -15,6 +15,7 @@ export default function AdminLayout() {
 
     const menuItems = [
         { icon: LayoutDashboard, label: 'Dashboard', path: '/admin' },
+        { icon: Users, label: 'Leads', path: '/admin/leads' },
         { icon: DollarSign, label: 'Harga', path: '/admin/pricing' },
         { icon: List, label: 'Fitur', path: '/admin/features' },
         { icon: Globe, label: 'SEO', path: '/admin/seo' },

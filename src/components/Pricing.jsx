@@ -5,9 +5,12 @@ import { Check } from 'lucide-react';
 import Button from './Button';
 import Badge from './Badge';
 
+import { useConsultation } from '../context/ConsultationContext';
+
 export default function Pricing() {
     const [plans, setPlans] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { openModal } = useConsultation();
 
     useEffect(() => {
         async function fetchPlans() {
@@ -125,6 +128,7 @@ export default function Pricing() {
                                         ? 'shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40'
                                         : 'border-slate-200 text-slate-600 hover:text-primary-600 hover:border-primary-600'
                                         }`}
+                                    onClick={openModal}
                                 >
                                     {plan.price === "Hubungi Kami" ? "Hubungi Sales" : (plan.highlight ? "Coba Sekarang" : "Pilih Paket")}
                                 </Button>
