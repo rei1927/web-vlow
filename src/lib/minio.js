@@ -2,13 +2,14 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 // Initialize S3 Client
 const startMinioClient = () => {
-    const endpoint = import.meta.env.VITE_MINIO_ENDPOINT;
-    const accessKeyId = import.meta.env.VITE_MINIO_ACCESS_KEY;
-    const secretAccessKey = import.meta.env.VITE_MINIO_SECRET_KEY;
+    // Fallback values for production (bypassing build-time env var issues)
+    const endpoint = import.meta.env.VITE_MINIO_ENDPOINT || "https://minio-api.dayamedialangit.co.id";
+    const accessKeyId = import.meta.env.VITE_MINIO_ACCESS_KEY || "admin";
+    const secretAccessKey = import.meta.env.VITE_MINIO_SECRET_KEY || "rahasia123";
     const region = import.meta.env.VITE_MINIO_REGION || "us-east-1";
 
     if (!endpoint || !accessKeyId || !secretAccessKey) {
-        console.warn("MinIO credentials are missing. Check your .env.local file.");
+        console.warn("MinIO credentials are missing.");
         return null;
     }
 
@@ -36,7 +37,7 @@ export const uploadFileToMinio = async (file, fileName) => {
         throw new Error("MinIO client is not initialized. Check credentials.");
     }
 
-    const bucketName = import.meta.env.VITE_MINIO_BUCKET;
+    const bucketName = import.meta.env.VITE_MINIO_BUCKET || "web-vlow";
 
     if (!bucketName) {
         throw new Error("MinIO bucket name is not configured.");
@@ -59,7 +60,7 @@ export const uploadFileToMinio = async (file, fileName) => {
 
         // Construct public URL
         // Format: https://endpoint/bucket/filename
-        const endpoint = import.meta.env.VITE_MINIO_ENDPOINT;
+        const endpoint = import.meta.env.VITE_MINIO_ENDPOINT || "https://minio-api.dayamedialangit.co.id";
         // Remove trailing slash if present
         const cleanEndpoint = endpoint.replace(/\/$/, "");
         return `${cleanEndpoint}/${bucketName}/${fileName}`;
