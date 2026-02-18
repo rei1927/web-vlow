@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { supabase } from '../../lib/supabase';
+import { uploadFileToMinio } from '../../lib/minio';
 import { Save, Upload, Image as ImageIcon } from 'lucide-react';
 import Button from '../../components/Button';
 
@@ -43,18 +44,10 @@ export default function AdminSettings() {
             const fileName = `hero-banner-${Date.now()}.${fileExt}`;
             const filePath = `${fileName}`;
 
-            // 1. Upload to Supabase Storage
-            const { error: uploadError } = await supabase.storage
-                .from('images')
-                .upload(filePath, file);
+            // 1. Upload to MinIO
+            const publicUrl = await uploadFileToMinio(file, filePath);
 
-            if (uploadError) throw uploadError;
-
-            // 2. Get Public URL
-            const { data } = supabase.storage.from('images').getPublicUrl(filePath);
-            const publicUrl = data.publicUrl;
-
-            // 3. Update Database
+            // 2. Update Database with new URL
             const { error: dbError } = await supabase
                 .from('site_settings')
                 .upsert({ id: SETTINGS_ID, hero_image_url: publicUrl, updated_at: new Date() });
@@ -62,7 +55,7 @@ export default function AdminSettings() {
             if (dbError) throw dbError;
 
             setPreview(publicUrl);
-            alert('Gambar berhasil diperbarui!');
+            alert('Gambar berhasil diperbarui ke MinIO!');
         } catch (error) {
             console.error('Error uploading image:', error);
             alert('Gagal mengupload gambar: ' + error.message);
