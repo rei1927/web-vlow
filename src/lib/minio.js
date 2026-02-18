@@ -42,10 +42,14 @@ export const uploadFileToMinio = async (file, fileName) => {
         throw new Error("MinIO bucket name is not configured.");
     }
 
+    // Convert file to ArrayBuffer/Uint8Array to avoid readableStream errors in some browsers
+    const fileBuffer = await file.arrayBuffer();
+    const fileData = new Uint8Array(fileBuffer);
+
     const command = new PutObjectCommand({
         Bucket: bucketName,
         Key: fileName,
-        Body: file,
+        Body: fileData,
         ContentType: file.type,
         ACL: "public-read", // Ensure the object is public
     });
