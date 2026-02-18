@@ -7,7 +7,9 @@ import Button from '../../components/Button';
 export default function AdminSettings() {
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
+    const [saving, setSaving] = useState(false);
     const [preview, setPreview] = useState(null);
+    const [altText, setAltText] = useState('');
 
     // We assume there's always a row with ID=1. If not, we'll insert it.
     const SETTINGS_ID = 1;
@@ -26,6 +28,7 @@ export default function AdminSettings() {
 
         if (data) {
             setPreview(data.hero_image_url);
+            setAltText(data.hero_image_alt || '');
         }
         setLoading(false);
     };
@@ -68,6 +71,27 @@ export default function AdminSettings() {
         }
     };
 
+    const handleSaveAltText = async () => {
+        try {
+            setSaving(true);
+            const { error } = await supabase
+                .from('site_settings')
+                .upsert({
+                    id: SETTINGS_ID,
+                    hero_image_alt: altText,
+                    updated_at: new Date()
+                });
+
+            if (error) throw error;
+            alert('Alt text berhasil diperbarui!');
+        } catch (error) {
+            console.error('Error saving alt text:', error);
+            alert('Gagal menyimpan alt text: ' + error.message);
+        } finally {
+            setSaving(false);
+        }
+    };
+
     return (
         <div>
             <h1 className="text-3xl font-bold text-dark-950 mb-6">Pengaturan Website</h1>
@@ -102,8 +126,8 @@ export default function AdminSettings() {
                             <label
                                 htmlFor="hero-upload"
                                 className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm transition-all cursor-pointer ${uploading
-                                        ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                                        : 'bg-primary-600 text-white hover:bg-primary-700 shadow-lg shadow-primary-500/30'
+                                    ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                                    : 'bg-primary-600 text-white hover:bg-primary-700 shadow-lg shadow-primary-500/30'
                                     }`}
                             >
                                 {uploading ? (
@@ -114,6 +138,27 @@ export default function AdminSettings() {
                             </label>
                             <p className="text-xs text-slate-400 mt-2">Disarankan ukuran 1200x800px atau lebih besar.</p>
                         </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="block text-sm font-medium text-slate-700">Alt Text / Deskripsi Gambar</label>
+                        <div className="flex gap-2">
+                            <input
+                                type="text"
+                                value={altText}
+                                onChange={(e) => setAltText(e.target.value)}
+                                placeholder="Contoh: Tampilan dashboard Vlow.AI"
+                                className="flex-1 px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                            />
+                            <Button
+                                onClick={handleSaveAltText}
+                                disabled={saving}
+                                className="whitespace-nowrap"
+                            >
+                                {saving ? 'Menyimpan...' : 'Simpan Text'}
+                            </Button>
+                        </div>
+                        <p className="text-xs text-slate-400">Deskripsi gambar untuk aksesabilitas dan SEO.</p>
                     </div>
 
                     <div className="bg-blue-50 text-blue-700 p-4 rounded-xl text-sm border border-blue-100">

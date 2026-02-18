@@ -10,6 +10,7 @@ import { useConsultation } from '../context/ConsultationContext';
 
 export default function Hero() {
     const [heroImage, setHeroImage] = useState(defaultHeroImage);
+    const [altText, setAltText] = useState("Vlow.AI Dashboard Interface");
     const { openModal } = useConsultation();
 
     useEffect(() => {
@@ -17,12 +18,13 @@ export default function Hero() {
             try {
                 const { data, error } = await supabase
                     .from('site_settings')
-                    .select('hero_image_url')
+                    .select('hero_image_url, hero_image_alt')
                     .eq('id', 1)
                     .single();
 
-                if (!error && data?.hero_image_url) {
-                    setHeroImage(data.hero_image_url);
+                if (!error && data) {
+                    if (data.hero_image_url) setHeroImage(data.hero_image_url);
+                    if (data.hero_image_alt) setAltText(data.hero_image_alt);
                 }
             } catch (err) {
                 console.error("Error loading hero image:", err);
@@ -115,7 +117,7 @@ export default function Hero() {
                             <div className="absolute -inset-4 bg-gradient-to-r from-primary-200 to-secondary-200 rounded-[2.5rem] blur-2xl opacity-40 -z-10" />
 
                             <div className="relative rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-200 border border-white/50 bg-white">
-                                <img src={heroImage} alt="Vlow.AI Dashboard Interface" className="w-full h-auto" />
+                                <img src={heroImage} alt={altText} className="w-full h-full object-cover" />
 
                                 {/* Floating Elements - Light Mode */}
                                 <motion.div
