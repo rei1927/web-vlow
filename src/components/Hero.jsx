@@ -4,12 +4,12 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Bot, MessageSquare, Zap } from 'lucide-react';
 import Button from './Button';
 import Badge from './Badge';
-import defaultHeroImage from '../assets/hero.png';
+// import defaultHeroImage from '../assets/hero.png'; // REMOVED: Prevent old image flicker
 
 import { useConsultation } from '../context/ConsultationContext';
 
 export default function Hero() {
-    const [heroImage, setHeroImage] = useState(defaultHeroImage);
+    const [heroImage, setHeroImage] = useState(null); // Init with null to show nothing/skeleton first
     const [altText, setAltText] = useState("Vlow.AI Dashboard Interface");
     const { openModal } = useConsultation();
 
@@ -116,8 +116,14 @@ export default function Hero() {
                             {/* Soft glow behind image */}
                             <div className="absolute -inset-4 bg-gradient-to-r from-primary-200 to-secondary-200 rounded-[2.5rem] blur-2xl opacity-40 -z-10" />
 
-                            <div className="relative rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-200 border border-white/50 bg-white">
-                                <img src={heroImage} alt={altText} className="w-full h-full object-cover" />
+                            <div className="relative rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-200 border border-white/50 bg-white aspect-[4/3] flex items-center justify-center">
+                                {heroImage ? (
+                                    <img src={heroImage} alt={altText} className="w-full h-full object-cover" />
+                                ) : (
+                                    <div className="w-full h-full bg-slate-100 animate-pulse flex items-center justify-center">
+                                        <Bot className="w-12 h-12 text-slate-300" />
+                                    </div>
+                                )}
 
                                 {/* Floating Elements - Light Mode */}
                                 <motion.div
