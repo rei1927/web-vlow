@@ -362,7 +362,7 @@ export default function Simulator() {
                                     />
                                 )}
                                 <p className="text-xs text-slate-500 mt-1">
-                                    Prompt ini akan menjadi instruksi utama bagi AI agent dalam merespon pesan.
+                                    Ini akan menjadi instruksi utama bagi AI agent dalam merespon pesan.
                                 </p>
                                 <div className="flex justify-end mt-2">
                                     <Button onClick={handleUpdateConfig} size="sm" className="gap-2 transition-all duration-300">
