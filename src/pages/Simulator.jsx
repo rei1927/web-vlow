@@ -300,13 +300,13 @@ export default function Simulator() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 lg:p-8">
-            <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-8 items-start justify-center h-[85vh]">
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 lg:p-8 overflow-y-auto">
+            <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-8 items-start justify-center min-h-[85vh] h-auto lg:h-[85vh]">
 
                 {/* Mobile Config Toggle */}
 
                 {/* Left Panel - Configuration */}
-                <div className={`w-full lg:w-1/3 flex flex-col gap-6 ${isConfigOpen ? 'h-auto' : 'h-fit'} lg:h-full transition-all duration-300`}>
+                <div className={`w-full lg:w-1/3 flex flex-col gap-6 ${isConfigOpen ? 'h-auto' : 'h-fit'} lg:h-full transition-all duration-300 shrink-0`}>
                     <div className="bg-white rounded-[2rem] shadow-xl p-6 border border-slate-100 flex-1 flex flex-col transition-all duration-300">
                         {/* Header - Clickable on Mobile */}
                         <div className="flex items-center justify-between cursor-pointer lg:cursor-default" onClick={() => setIsConfigOpen(!isConfigOpen)}>
@@ -387,7 +387,7 @@ export default function Simulator() {
                 </div>
 
                 {/* Right Panel - Phone Simulator */}
-                <div className="w-full lg:w-1/3 h-full flex justify-center">
+                <div className="w-full lg:w-1/3 h-[85vh] lg:h-full flex justify-center">
                     <div className="w-full max-w-md bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-slate-200 h-full flex flex-col relative ring-8 ring-slate-900/5">
 
                         {/* Header */}
