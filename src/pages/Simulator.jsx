@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, ArrowLeft, MoreVertical, Phone, Video, Smile, Paperclip, CheckCheck, Settings, Home, Save } from 'lucide-react';
+import { Send, ArrowLeft, MoreVertical, Phone, Video, Smile, Paperclip, CheckCheck, Settings, Home, Save, ChevronDown, ChevronUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import Button from '../components/Button';
@@ -112,6 +112,8 @@ export default function Simulator() {
     const [n8nWebhook, setN8nWebhook] = useState("");
     const [isTyping, setIsTyping] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
+    const [showToast, setShowToast] = useState(false); // Toast notification state
+    const [isConfigOpen, setIsConfigOpen] = useState(false); // Mobile config toggle
     const [isLoading, setIsLoading] = useState(true);
     const messagesEndRef = useRef(null);
 
@@ -174,8 +176,15 @@ export default function Simulator() {
             console.log("System prompt saved to LocalStorage");
 
             setIsSaved(true);
-            setTimeout(() => setIsSaved(false), 2000);
+            setShowToast(true); // Show toast
+            setTimeout(() => {
+                setIsSaved(false);
+                setShowToast(false); // Hide toast
+            }, 3000); // 3 seconds visibility
+
             setMessages(INITIAL_MESSAGES); // Optional: Reset chat to apply new "concept"
+            // Ensure config panel closes on mobile for better UX? Optional. 
+            // setIsConfigOpen(false); 
         } catch (err) {
             console.error("Error saving config:", err);
             alert("Gagal menyimpan konfigurasi.");
@@ -276,20 +285,29 @@ export default function Simulator() {
         <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 lg:p-8">
             <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-8 items-start justify-center h-[85vh]">
 
+                {/* Mobile Config Toggle */}
+
                 {/* Left Panel - Configuration */}
-                <div className="w-full lg:w-1/3 flex flex-col gap-6 h-full">
-                    <div className="bg-white rounded-[2rem] shadow-xl p-6 border border-slate-100 flex-1 flex flex-col">
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center text-primary-600">
-                                <Settings className="w-6 h-6" />
+                <div className={`w-full lg:w-1/3 flex flex-col gap-6 ${isConfigOpen ? 'h-auto' : 'h-fit'} lg:h-full transition-all duration-300`}>
+                    <div className="bg-white rounded-[2rem] shadow-xl p-6 border border-slate-100 flex-1 flex flex-col transition-all duration-300">
+                        {/* Header - Clickable on Mobile */}
+                        <div className="flex items-center justify-between cursor-pointer lg:cursor-default" onClick={() => setIsConfigOpen(!isConfigOpen)}>
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center text-primary-600">
+                                    <Settings className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <h1 className="text-xl font-bold text-slate-900">Konfigurasi AI Agent</h1>
+                                    <p className="text-sm text-slate-500">Sesuaikan perilaku agent kamu</p>
+                                </div>
                             </div>
-                            <div>
-                                <h1 className="text-xl font-bold text-slate-900">Konfigurasi AI Agent</h1>
-                                <p className="text-sm text-slate-500">Sesuaikan perilaku agent kamu</p>
+                            <div className="lg:hidden text-slate-400">
+                                {isConfigOpen ? <ChevronUp className="w-6 h-6" /> : <ChevronDown className="w-6 h-6" />}
                             </div>
                         </div>
 
-                        <div className="flex-1 flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar">
+                        {/* Content - Collapsible on Mobile */}
+                        <div className={`flex-1 flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar mt-6 transition-all duration-300 ${isConfigOpen ? 'flex' : 'hidden lg:flex'}`}>
                             {/* n8n Webhook URL input hidden for security */}
 
                             <div className="flex flex-col gap-2">
@@ -459,5 +477,23 @@ export default function Simulator() {
                 </div>
             </div>
         </div>
+
+            {/* Toast Notification */ }
+    <AnimatePresence>
+        {showToast && (
+            <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 50 }}
+                className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 z-50"
+            >
+                <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center shrink-0">
+                    <CheckCheck className="w-4 h-4 text-white" />
+                </div>
+                <p className="font-medium text-sm">Konfigurasi tersimpan, silahkan memulai chat</p>
+            </motion.div>
+        )}
+    </AnimatePresence>
+        </div >
     );
 }
