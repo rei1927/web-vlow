@@ -333,7 +333,7 @@ export default function Simulator() {
                         </div>
 
                         {/* Content - Collapsible on Mobile */}
-                        <div className={`flex-1 flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar mt-6 transition-all duration-300 ${isConfigOpen ? 'flex' : 'hidden lg:flex'}`}>
+                        <div className={`flex-1 flex flex-col gap-4 overflow-y-auto px-1 pb-6 custom-scrollbar mt-6 transition-all duration-300 ${isConfigOpen ? 'flex' : 'hidden lg:flex'}`}>
                             {/* n8n Webhook URL input hidden for security */}
 
                             <div className="flex flex-col gap-2">
