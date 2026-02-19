@@ -319,8 +319,8 @@ export default function Simulator() {
                                     <p className="text-sm text-slate-500">Sesuaikan perilaku agent kamu</p>
                                 </div>
                             </div>
-                            <div className="lg:hidden text-slate-400">
-                                {isConfigOpen ? <ChevronUp className="w-6 h-6" /> : <ChevronDown className="w-6 h-6" />}
+                            <div className="lg:hidden text-slate-900 shrink-0 bg-slate-100 p-2 rounded-full">
+                                {isConfigOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                             </div>
                         </div>
 
