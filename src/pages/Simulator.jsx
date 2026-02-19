@@ -108,7 +108,7 @@ export default function Simulator() {
     const [messages, setMessages] = useState(INITIAL_MESSAGES);
     const [inputText, setInputText] = useState("");
     const [systemPrompt, setSystemPrompt] = useState(""); // Init empty, will fetch
-    const [agentName, setAgentName] = useState("Vlow.AI Assistant"); // Default name
+    const [agentName, setAgentName] = useState(""); // Default empty, shows placeholder
     const [n8nWebhook, setN8nWebhook] = useState("");
     const [isTyping, setIsTyping] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
@@ -214,6 +214,24 @@ export default function Simulator() {
         setInputText("");
         setIsTyping(true);
 
+        // Check Rate Limit (IP based)
+        const ip = await getIpAddress();
+        const allowed = await checkAndIncrementRateLimit(ip);
+
+        if (!allowed) {
+            setIsTyping(false);
+            const limitMessage = {
+                id: Date.now() + 1,
+                text: "⚠️ Sesi simulator telah berakhir, Apakah anda tertarik? Silahkan hubungi kami",
+                sender: 'bot',
+                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+            setTimeout(() => {
+                setMessages(prev => [...prev, limitMessage]);
+            }, 600);
+            return;
+        }
+
 
 
 
@@ -317,7 +335,7 @@ export default function Simulator() {
                                     value={agentName}
                                     onChange={(e) => setAgentName(e.target.value)}
                                     className="w-full p-3 rounded-xl border border-slate-200 bg-slate-50 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none text-sm"
-                                    placeholder="Contoh: CS Toko Kucing"
+                                    placeholder="Contoh: CS Petshop Pawshop"
                                 />
                             </div>
 
@@ -332,7 +350,7 @@ export default function Simulator() {
                                         value={systemPrompt}
                                         onChange={(e) => setSystemPrompt(e.target.value)}
                                         className="w-full flex-1 p-4 rounded-xl border border-slate-200 bg-slate-50 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none resize-none text-sm leading-relaxed"
-                                        placeholder="Kamu adalah asisten virtual yang ramah dan membantu untuk Vlow.AI..."
+                                        placeholder="Kamu adalah asisten virtual yang ramah untuk membantu petshop Pawshop..."
                                     />
                                 )}
                                 <p className="text-xs text-slate-500 mt-1">
@@ -346,7 +364,18 @@ export default function Simulator() {
                                 </div>
                             </div>
 
-                            <div className="mt-6 pt-6 border-t border-slate-100">
+                            <div className="mt-6 pt-6 border-t border-slate-100 flex flex-col gap-3">
+                                <a
+                                    href="https://wa.me/6287885487671?text=Halo%20Vlow.AI%2C%20saya%20tertarik%20setelah%20mencoba%20simulator"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="block"
+                                >
+                                    <Button className="w-full justify-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white shadow-lg shadow-green-500/20 border-none">
+                                        <Phone className="w-4 h-4" /> Hubungi Kami
+                                    </Button>
+                                </a>
+
                                 <Link to="/">
                                     <Button variant="outline" className="w-full justify-center gap-2">
                                         <Home className="w-4 h-4" /> Kembali ke Beranda
@@ -367,10 +396,10 @@ export default function Simulator() {
                                 <ArrowLeft className="w-6 h-6" />
                             </Link>
                             <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold text-lg border border-white/30">
-                                {agentName.charAt(0).toUpperCase()}
+                                {(agentName || "Vlow.AI Assistant").charAt(0).toUpperCase()}
                             </div>
                             <div className="flex-1 min-w-0">
-                                <h2 className="font-semibold text-base truncate">{agentName}</h2>
+                                <h2 className="font-semibold text-base truncate">{agentName || "Vlow.AI Assistant"}</h2>
                                 <p className="text-xs text-green-100 truncate font-medium">
                                     {isTyping ? "sedang mengetik..." : "Online"}
                                 </p>
@@ -476,24 +505,22 @@ export default function Simulator() {
                     </div>
                 </div>
             </div>
+            {/* Toast Notification */}
+            <AnimatePresence>
+                {showToast && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 50 }}
+                        className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 z-50"
+                    >
+                        <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center shrink-0">
+                            <CheckCheck className="w-4 h-4 text-white" />
+                        </div>
+                        <p className="font-medium text-sm">Konfigurasi tersimpan, silahkan memulai chat</p>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
-
-            {/* Toast Notification */ }
-    <AnimatePresence>
-        {showToast && (
-            <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 50 }}
-                className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 z-50"
-            >
-                <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center shrink-0">
-                    <CheckCheck className="w-4 h-4 text-white" />
-                </div>
-                <p className="font-medium text-sm">Konfigurasi tersimpan, silahkan memulai chat</p>
-            </motion.div>
-        )}
-    </AnimatePresence>
-        </div >
     );
 }

@@ -93,9 +93,10 @@ export default function Hero() {
                                 <Button size="lg" className="w-full sm:w-auto shadow-xl shadow-primary-500/20" onClick={openModal}>
                                     Coba Gratis Sekarang <ArrowRight className="w-5 h-5 ml-2" />
                                 </Button>
-                                <Link to="/simulator" className="w-full sm:w-auto">
-                                    <Button variant="outline" size="lg" className="w-full">
-                                        Lihat Demo
+                                <Link to="/simulator" className="w-full sm:w-auto group">
+                                    <Button variant="outline" size="lg" className="w-full relative overflow-visible text-slate-900 transition-all duration-300 animate-breathing-glow hover:scale-105 active:scale-95 bg-white">
+                                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/10 via-purple-400/20 to-blue-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                        <span className="relative z-10 font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">Coba Simulator</span>
                                     </Button>
                                 </Link>
                             </div>
