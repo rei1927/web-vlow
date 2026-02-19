@@ -172,6 +172,10 @@ export default function Simulator() {
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
 
+        setMessages(prev => [...prev, newUserMessage]);
+        setInputText("");
+        setIsTyping(true);
+
 
 
 
