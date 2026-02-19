@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Bot, MessageSquare, Zap } from 'lucide-react';
 import Button from './Button';
@@ -92,9 +93,11 @@ export default function Hero() {
                                 <Button size="lg" className="w-full sm:w-auto shadow-xl shadow-primary-500/20" onClick={openModal}>
                                     Coba Gratis Sekarang <ArrowRight className="w-5 h-5 ml-2" />
                                 </Button>
-                                <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                                    Lihat Demo
-                                </Button>
+                                <Link to="/simulator" className="w-full sm:w-auto">
+                                    <Button variant="outline" size="lg" className="w-full">
+                                        Lihat Demo
+                                    </Button>
+                                </Link>
                             </div>
 
                             <div className="mt-10 flex items-center justify-center lg:justify-start gap-8 text-slate-500 text-sm font-medium">

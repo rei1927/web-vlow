@@ -19,6 +19,7 @@ const AdminPricing = React.lazy(() => import('./pages/admin/Pricing'));
 const AdminFeatures = React.lazy(() => import('./pages/admin/Features'));
 const AdminSettings = React.lazy(() => import('./pages/admin/Settings'));
 const AdminSEO = React.lazy(() => import('./pages/admin/SEO'));
+const Simulator = React.lazy(() => import('./pages/Simulator'));
 
 import { ConsultationProvider } from './context/ConsultationContext';
 import ConsultationModal from './components/ConsultationModal';
@@ -50,6 +51,11 @@ function App() {
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<LandingPage />} />
+            <Route path="/simulator" element={
+              <React.Suspense fallback={<div className="p-8 text-center">Loading Simulator...</div>}>
+                <Simulator />
+              </React.Suspense>
+            } />
             <Route path="/cmsadmin" element={<Login />} />
 
             {/* Protected Routes */}
