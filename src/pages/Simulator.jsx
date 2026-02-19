@@ -358,7 +358,7 @@ export default function Simulator() {
                                         value={systemPrompt}
                                         onChange={(e) => setSystemPrompt(e.target.value)}
                                         className="w-full flex-1 p-4 rounded-xl border border-slate-200 bg-slate-50 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none resize-none text-sm leading-relaxed"
-                                        placeholder="Kamu adalah asisten virtual yang ramah untuk membantu petshop Pawshop..."
+                                        placeholder="Contoh : Kamu adalah asisten virtual yang ramah untuk membantu petshop Pawshop..."
                                     />
                                 )}
                                 <p className="text-xs text-slate-500 mt-1">
