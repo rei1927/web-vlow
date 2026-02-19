@@ -18,13 +18,34 @@ const MAX_MESSAGES_PER_IP = 15;
 
 const getIpAddress = async () => {
     try {
+        // Try primary service
         const response = await fetch('https://api.ipify.org?format=json');
-        const data = await response.json();
-        return data.ip;
+        if (response.ok) {
+            const data = await response.json();
+            return data.ip;
+        }
+        throw new Error("Primary IP fetch failed");
     } catch (error) {
-        console.error("Error fetching IP:", error);
-        return null;
+        console.warn("Primary IP fetch failed, trying fallback...", error);
+        try {
+            // Try fallback service
+            const response = await fetch('https://api.db-ip.com/v2/free/self');
+            if (response.ok) {
+                const data = await response.json();
+                return data.ipAddress;
+            }
+        } catch (err2) {
+            console.error("All IP fetch services failed:", err2);
+            // Fallback to a generated ID stored in LocalStorage to ensure tracking works
+            let fallbackId = localStorage.getItem('vlow_device_id');
+            if (!fallbackId) {
+                fallbackId = 'unknown-' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('vlow_device_id', fallbackId);
+            }
+            return fallbackId;
+        }
     }
+    return null;
 };
 
 const checkAndIncrementRateLimit = async (ip) => {
@@ -87,6 +108,7 @@ export default function Simulator() {
     const [messages, setMessages] = useState(INITIAL_MESSAGES);
     const [inputText, setInputText] = useState("");
     const [systemPrompt, setSystemPrompt] = useState(""); // Init empty, will fetch
+    const [agentName, setAgentName] = useState("Vlow.AI Assistant"); // Default name
     const [n8nWebhook, setN8nWebhook] = useState("");
     const [isTyping, setIsTyping] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
@@ -99,6 +121,9 @@ export default function Simulator() {
             try {
                 // 1. Try to get from LocalStorage first (User's custom session)
                 const storedPrompt = localStorage.getItem('vlow_system_prompt');
+                const storedAgentName = localStorage.getItem('vlow_agent_name');
+
+                if (storedAgentName) setAgentName(storedAgentName);
 
                 // 2. Fetch "Global Default" from Supabase
                 const { data, error } = await supabase
@@ -112,17 +137,16 @@ export default function Simulator() {
                 if (data) {
                     setN8nWebhook(data.n8n_webhook_url || "");
 
-                    // If user has a stored prompt, use it. Otherwise use global default.
+                    // Only set system prompt if USER HAS STORED IT or if Supabase has a non-default one?
+                    // User requested: "harus kosong, hanya ada pesan bayangan"
+                    // So we only load if localStorage has it. 
+                    // If localStorage is empty, we leave it empty (to show placeholder).
                     if (storedPrompt) {
                         setSystemPrompt(storedPrompt);
-                    } else {
-                        setSystemPrompt(data.system_prompt || "Kamu adalah asisten virtual yang ramah dan membantu untuk Vlow.AI.");
                     }
                 } else {
                     if (storedPrompt) {
                         setSystemPrompt(storedPrompt);
-                    } else {
-                        setSystemPrompt("Kamu adalah asisten virtual yang ramah dan membantu untuk Vlow.AI.");
                     }
                     if (error) console.error("Error fetching defaults:", error);
                 }
@@ -130,6 +154,9 @@ export default function Simulator() {
                 console.error("Error fetching settings:", err);
                 const storedPrompt = localStorage.getItem('vlow_system_prompt');
                 if (storedPrompt) setSystemPrompt(storedPrompt);
+
+                const storedAgentName = localStorage.getItem('vlow_agent_name');
+                if (storedAgentName) setAgentName(storedAgentName);
             } finally {
                 setIsLoading(false);
             }
@@ -141,7 +168,9 @@ export default function Simulator() {
         setIsSaved(false); // Reset saved state
         try {
             // Save to LocalStorage (User Session only)
+            // Save to LocalStorage (User Session only)
             localStorage.setItem('vlow_system_prompt', systemPrompt);
+            localStorage.setItem('vlow_agent_name', agentName);
             console.log("System prompt saved to LocalStorage");
 
             setIsSaved(true);
@@ -193,7 +222,7 @@ export default function Simulator() {
                     body: JSON.stringify({
                         message: inputText,
                         sessionId: 'test-session-' + Date.now(), // Basic session ID
-                        systemPrompt: systemPrompt // Also send in body as fallback
+                        systemPrompt: systemPrompt || "Kamu adalah asisten virtual yang ramah dan membantu untuk Vlow.AI." // Use default if empty
                     })
                 });
 
@@ -263,6 +292,17 @@ export default function Simulator() {
                         <div className="flex-1 flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar">
                             {/* n8n Webhook URL input hidden for security */}
 
+                            <div className="flex flex-col gap-2">
+                                <label className="text-sm font-semibold text-slate-700">Nama Agent</label>
+                                <input
+                                    type="text"
+                                    value={agentName}
+                                    onChange={(e) => setAgentName(e.target.value)}
+                                    className="w-full p-3 rounded-xl border border-slate-200 bg-slate-50 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none text-sm"
+                                    placeholder="Contoh: CS Toko Kucing"
+                                />
+                            </div>
+
                             <div className="flex flex-col gap-2 flex-1">
                                 <label className="text-sm font-semibold text-slate-700">System Prompt</label>
                                 {isLoading ? (
@@ -274,7 +314,7 @@ export default function Simulator() {
                                         value={systemPrompt}
                                         onChange={(e) => setSystemPrompt(e.target.value)}
                                         className="w-full flex-1 p-4 rounded-xl border border-slate-200 bg-slate-50 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none resize-none text-sm leading-relaxed"
-                                        placeholder="Definisikan bagaimana AI agent kamu harus bersikap..."
+                                        placeholder="Kamu adalah asisten virtual yang ramah dan membantu untuk Vlow.AI..."
                                     />
                                 )}
                                 <p className="text-xs text-slate-500 mt-1">
@@ -309,10 +349,10 @@ export default function Simulator() {
                                 <ArrowLeft className="w-6 h-6" />
                             </Link>
                             <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold text-lg border border-white/30">
-                                V
+                                {agentName.charAt(0).toUpperCase()}
                             </div>
                             <div className="flex-1 min-w-0">
-                                <h2 className="font-semibold text-base truncate">Vlow.AI Assistant</h2>
+                                <h2 className="font-semibold text-base truncate">{agentName}</h2>
                                 <p className="text-xs text-green-100 truncate font-medium">
                                     {isTyping ? "sedang mengetik..." : "Online"}
                                 </p>
