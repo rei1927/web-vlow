@@ -348,7 +348,7 @@ export default function Simulator() {
                             </div>
 
                             <div className="flex flex-col gap-2 flex-1">
-                                <label className="text-sm font-semibold text-slate-700">System Prompt</label>
+                                <label className="text-sm font-semibold text-slate-700">Personalisasi Ai Agent</label>
                                 {isLoading ? (
                                     <div className="w-full flex-1 p-4 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-center text-slate-400">
                                         Loading prompt...
