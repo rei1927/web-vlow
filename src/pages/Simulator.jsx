@@ -5,14 +5,7 @@ import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import Button from '../components/Button';
 
-const INITIAL_MESSAGES = [
-    {
-        id: 1,
-        text: "Halo! 👋 Saya Vlow AI Assistant. Ada yang bisa saya bantu untuk bisnis kamu hari ini?",
-        sender: 'bot',
-        timestamp: new Date(Date.now() - 60000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    }
-];
+const INITIAL_MESSAGES = [];
 
 const MAX_MESSAGES_PER_IP = 15;
 
@@ -213,6 +206,21 @@ export default function Simulator() {
         setMessages(prev => [...prev, newUserMessage]);
         setInputText("");
         setIsTyping(true);
+
+        // Check Empty Configuration
+        if (!systemPrompt || !systemPrompt.trim()) {
+            setIsTyping(false);
+            const emptyConfigMessage = {
+                id: Date.now() + 1,
+                text: "⚠️ Konfigurasi masih Kosong, Mohon isi terlebih dahulu",
+                sender: 'bot',
+                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+            setTimeout(() => {
+                setMessages(prev => [...prev, emptyConfigMessage]);
+            }, 600);
+            return;
+        }
 
         // Check Rate Limit (IP based)
         const ip = await getIpAddress();
