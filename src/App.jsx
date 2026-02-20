@@ -22,6 +22,7 @@ const AdminSEO = React.lazy(() => import('./pages/admin/SEO'));
 const Simulator = React.lazy(() => import('./pages/Simulator'));
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsAndConditions from './pages/TermsAndConditions';
+import DataDeletion from './pages/DataDeletion';
 
 import { ConsultationProvider } from './context/ConsultationContext';
 import ConsultationModal from './components/ConsultationModal';
@@ -60,6 +61,7 @@ function App() {
             } />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+            <Route path="/data-deletion" element={<DataDeletion />} />
             <Route path="/cmsadmin" element={<Login />} />
 
             {/* Protected Routes */}
