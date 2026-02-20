@@ -20,6 +20,8 @@ const AdminFeatures = React.lazy(() => import('./pages/admin/Features'));
 const AdminSettings = React.lazy(() => import('./pages/admin/Settings'));
 const AdminSEO = React.lazy(() => import('./pages/admin/SEO'));
 const Simulator = React.lazy(() => import('./pages/Simulator'));
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsAndConditions from './pages/TermsAndConditions';
 
 import { ConsultationProvider } from './context/ConsultationContext';
 import ConsultationModal from './components/ConsultationModal';
@@ -56,6 +58,8 @@ function App() {
                 <Simulator />
               </React.Suspense>
             } />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
             <Route path="/cmsadmin" element={<Login />} />
 
             {/* Protected Routes */}

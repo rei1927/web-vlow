@@ -40,8 +40,8 @@ export default function Footer() {
                     <div>
                         <h3 className="font-bold text-white mb-6">Legal</h3>
                         <ul className="space-y-3 text-sm text-slate-400">
-                            <li><a href="#" className="hover:text-white transition-colors">Kebijakan Privasi</a></li>
-                            <li><a href="#" className="hover:text-white transition-colors">Syarat & Ketentuan</a></li>
+                            <li><a href="/privacy-policy" className="hover:text-white transition-colors">Kebijakan Privasi</a></li>
+                            <li><a href="/terms-and-conditions" className="hover:text-white transition-colors">Syarat & Ketentuan</a></li>
                         </ul>
                     </div>
                 </div>
