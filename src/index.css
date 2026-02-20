@@ -32,12 +32,17 @@
   --animate-breathing-glow: breathing-glow 3s infinite ease-in-out;
 
   @keyframes breathing-glow {
-    0%, 100% {
-      box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); /* Primary Blue */
+
+    0%,
+    100% {
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+      /* Primary Blue */
       border-color: var(--color-primary-300);
     }
+
     50% {
-      box-shadow: 0 0 35px rgba(168, 85, 247, 0.7); /* Purple Glow */
+      box-shadow: 0 0 35px rgba(168, 85, 247, 0.7);
+      /* Purple Glow */
       border-color: var(--color-secondary-400);
     }
   }
@@ -49,6 +54,8 @@
     scroll-behavior: smooth;
     background-color: #ffffff;
     color: #1A1615;
+    overflow-x: hidden;
+    width: 100%;
   }
 
   body {
@@ -56,5 +63,10 @@
     color: #1A1615;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+    margin: 0;
+    padding: 0;
   }
 }
