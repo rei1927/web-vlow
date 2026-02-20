@@ -7,6 +7,7 @@ export default function Button({
     size = 'md',
     className = '',
     icon: Icon,
+    href,
     ...props
 }) {
     const variants = {
@@ -22,8 +23,11 @@ export default function Button({
         lg: "px-8 py-4 text-lg font-semibold"
     };
 
+    const Component = href ? motion.a : motion.button;
+
     return (
-        <motion.button
+        <Component
+            href={href}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className={`
@@ -36,6 +40,6 @@ export default function Button({
         >
             {children}
             {Icon && <Icon className="w-5 h-5" />}
-        </motion.button>
+        </Component>
     );
 }

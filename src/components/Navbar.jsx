@@ -27,7 +27,7 @@ export default function Navbar() {
                         <a href="#efficiency" className="text-sm font-medium text-slate-600 hover:text-primary-600 transition-colors">Efisiensi</a>
                         <a href="#pricing" className="text-sm font-medium text-slate-600 hover:text-primary-600 transition-colors">Harga</a>
                         <div className="flex items-center gap-4">
-                            <a href="#" className="text-sm font-medium text-slate-900 hover:text-primary-600">Masuk</a>
+                            <a href="https://login.vlow-ai.com/login" className="text-sm font-medium text-slate-900 hover:text-primary-600">Masuk</a>
                             <Button size="sm" className="rounded-full px-6" onClick={openModal}>Coba Gratis</Button>
                         </div>
                     </div>
@@ -56,7 +56,7 @@ export default function Navbar() {
                             <a href="#efficiency" className="block px-3 py-2 text-slate-600 hover:text-primary-600 hover:bg-secondary-50 rounded-lg">Efisiensi</a>
                             <a href="#pricing" className="block px-3 py-2 text-slate-600 hover:text-primary-600 hover:bg-secondary-50 rounded-lg">Harga</a>
                             <div className="pt-4 flex flex-col gap-3">
-                                <Button variant="outline" className="w-full justify-center">Masuk</Button>
+                                <Button variant="outline" className="w-full justify-center" href="https://login.vlow-ai.com/login">Masuk</Button>
                                 <Button className="w-full justify-center" onClick={openModal}>Coba Gratis</Button>
                             </div>
                         </div>
