@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, ArrowLeft, MoreVertical, Phone, Video, Smile, Paperclip, CheckCheck, Settings, Home, Save, ChevronDown, ChevronUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -41,18 +42,22 @@ const getIpAddress = async () => {
     return null;
 };
 
-const checkAndIncrementRateLimit = async (ip) => {
-    if (!ip) return true; // Fail open if IP fetch fails (or block, depending on security needs)
+const checkAndIncrementRateLimit = async (ip, visitorId) => {
+    if (!ip && !visitorId) return true;
 
     try {
-        // 1. Check existing log
-        const { data: logs, error: fetchError } = await supabase
-            .from('simulator_logs')
-            .select('*')
-            .eq('ip_address', ip)
-            .single();
+        // 1. Check existing log (Prioritize visitorId)
+        let query = supabase.from('simulator_logs').select('*');
 
-        if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 is "Row not found"
+        if (visitorId) {
+            query = query.eq('visitor_id', visitorId);
+        } else {
+            query = query.eq('ip_address', ip);
+        }
+
+        const { data: logs, error: fetchError } = await query.single();
+
+        if (fetchError && fetchError.code !== 'PGRST116') {
             console.error("Error checking logs:", fetchError);
             return true; // Fail open
         }
@@ -68,16 +73,22 @@ const checkAndIncrementRateLimit = async (ip) => {
                 .from('simulator_logs')
                 .update({
                     message_count: logs.message_count + 1,
-                    last_activity: new Date().toISOString()
+                    last_activity: new Date().toISOString(),
+                    // Update visitor_id if it was missing (e.g. migration from IP-only)
+                    visitor_id: visitorId || logs.visitor_id
                 })
                 .eq('id', logs.id);
 
             if (updateError) console.error("Error updating log:", updateError);
         } else {
-            // First time for this IP
+            // First time for this User
             const { error: insertError } = await supabase
                 .from('simulator_logs')
-                .insert([{ ip_address: ip, message_count: 1 }]);
+                .insert([{
+                    ip_address: ip || 'unknown',
+                    visitor_id: visitorId,
+                    message_count: 1
+                }]);
 
             if (insertError) console.error("Error inserting log:", insertError);
         }
@@ -106,7 +117,8 @@ export default function Simulator() {
     const [isTyping, setIsTyping] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [showToast, setShowToast] = useState(false); // Toast notification state
-    const [isConfigOpen, setIsConfigOpen] = useState(false); // Mobile config toggle
+    const [isConfigOpen, setIsConfigOpen] = useState(false);
+    const [visitorId, setVisitorId] = useState(null); // Mobile config toggle
     const [isLoading, setIsLoading] = useState(true);
     const messagesEndRef = useRef(null);
 
@@ -157,6 +169,17 @@ export default function Simulator() {
             }
         };
         fetchSettings();
+    }, []);
+
+    // Initialize FingerprintJS
+    useEffect(() => {
+        const setFp = async () => {
+            const fp = await FingerprintJS.load();
+            const { visitorId } = await fp.get();
+            setVisitorId(visitorId);
+            console.log("Visitor ID:", visitorId);
+        };
+        setFp();
     }, []);
 
     const handleUpdateConfig = async () => {
@@ -222,9 +245,9 @@ export default function Simulator() {
             return;
         }
 
-        // Check Rate Limit (IP based)
+        // Check Rate Limit (Visitor ID based > IP based)
         const ip = await getIpAddress();
-        const allowed = await checkAndIncrementRateLimit(ip);
+        const allowed = await checkAndIncrementRateLimit(ip, visitorId);
 
         if (!allowed) {
             setIsTyping(false);
