@@ -55,9 +55,9 @@ const checkAndIncrementRateLimit = async (ip, visitorId) => {
             query = query.eq('ip_address', ip);
         }
 
-        const { data: logs, error: fetchError } = await query.single();
+        const { data: logs, error: fetchError } = await query.maybeSingle();
 
-        if (fetchError && fetchError.code !== 'PGRST116') {
+        if (fetchError) {
             console.error("Error checking logs:", fetchError);
             return true; // Fail open
         }
@@ -279,8 +279,8 @@ export default function Simulator() {
                     },
                     body: JSON.stringify({
                         message: inputText,
-                        sessionId: 'test-session-' + Date.now(), // Basic session ID
-                        systemPrompt: systemPrompt || "Kamu adalah asisten virtual yang ramah dan membantu untuk Vlow.AI." // Use default if empty
+                        sessionId: visitorId || localStorage.getItem('vlow_device_id') || 'session-' + Date.now(),
+                        systemPrompt: systemPrompt || "Kamu adalah asisten virtual yang ramah dan membantu untuk Vlow.AI."
                     })
                 });
 
